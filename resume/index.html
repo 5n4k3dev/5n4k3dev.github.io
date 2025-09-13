@@ -1,0 +1,110 @@
+
+    /* remove button */
+    @media print {
+      .print-btn {
+        display: none;
+      }
+    }
+  </style>
+</head>
+  
+<body>
+  <!-- print button -->
+  <button class="print-btn" onclick="window.print()">
+    <img src="print-icon.png" alt="Print">
+  </button>
+</body>
+</html>
+
+
+
+
+------
+<!DOCTYPE html>
+<html lang="en">
+  
+<head>
+  <meta charset="UTF-8">
+  
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      text-align: center;
+      margin: 0;
+      padding: 20px;
+      background: #f9f9f9;
+    }
+
+/* Resume Container */
+    .resume-container {
+      display: flex;
+      justify-content: center;
+      margin-top: 20px;
+    }
+
+    iframe, img {
+      width: 80%;
+      max-width: 900px;
+      height: 90vh;
+      border: none;
+      background: white;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    }
+
+    
+/* Print Button */
+    .print-btn {
+      cursor: pointer;
+      background: #007acc;
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      margin-top: 10px;
+      border-radius: 8px;
+      font-size: 16px;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      transition: background 0.3s ease;
+    }
+
+    .print-btn:hover {
+      background: #005a99;
+    }
+
+    
+/* Hide Botton */
+    @media print {
+      .print-btn {
+        display: none;
+      }
+      body {
+        background: white;
+        margin: 0;
+      }
+      iframe, img {
+        width: 100%;
+        height: auto;
+        box-shadow: none;
+      }
+    }
+  </style>
+
+</head>
+<body>
+
+  
+  <!-- Print Button -->
+  <button class="print-btn" onclick="window.print()">
+    <i class="fa fa-print"></i> Print
+  </button>
+
+  <!-- resume.pdf -->
+  <div class="resume-container">
+    <iframe src="resume.pdf"></iframe>
+  </div>
+
+
+</body>
+</html>
