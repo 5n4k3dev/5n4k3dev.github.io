@@ -3,29 +3,30 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-    <title>Portfolio</title>
+    
+    <title>★</title>
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-     <img src="./image.jpg" align="left" alt="Fresh Salmon" width="500">
+    <div style="display: flex; align-items: flex-start;">
+        <img src="./image.jpg" alt="Fresh Salmon" width="500" style="margin-right: 32px;">
 
-    <h1>★</h1>
+        <div style="flex: 1;">
+            <div style="display: flex; align-items: center; gap: 20px;">
+                <h1 style="margin: 0;">★</h1>
+                <a href="/resume" style="font-size: 1.5em; text-decoration: underline; color: #0070f3; cursor: pointer;">resume</a>
+            </div>
 
-<!--
-    <audio controls>
-    <source src="./music.mp3" type="audio/mpeg">
-    音乐播放失败
-    <buttom>Click here to...</buttom>
-    </audio>   
- --->   
-    
-<embed src="//music.163.com/style/swf/widget.swf?sid=385387&type=2&auto=1&width=278&height=32" 
-    width="298" height="52"  allowNetworking="all"></embed>
-    <form>
-        <input type="text" id="box1">
-        <label for="box1"> sign in </label>
-    </form>
+            <div style="margin: 24px 0;">
+                <embed src="//music.163.com/style/swf/widget.swf?sid=385387&type=2&auto=1&width=278&height=32" 
+                    width="298" height="52" allowNetworking="all"></embed>
+            </div>
+
+            <form>
+                <label for="box1">sign in</label>
+                <input type="text" id="box1" style="margin-left: 8px;">
+            </form>
+        </div>
+    </div>
 </body>
 </html>
-
