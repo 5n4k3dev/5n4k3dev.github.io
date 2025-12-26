@@ -1,4 +1,3 @@
-### mi WIP website
 
   ╱|、   
 (˚ˎ 。7     
