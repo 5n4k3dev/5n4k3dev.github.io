@@ -1,6 +1,6 @@
-// Basic world setup
 
-const canvas = document.getElementById("world");
+// Canvas setup
+const canvas = document.getElementById("canvas");
 const ctx = canvas.getContext("2d");
 
 function resize() {
@@ -10,12 +10,10 @@ function resize() {
 resize();
 window.addEventListener("resize", resize);
 
-
-// Audio from Web Audio API
-
+// Audio (generated, no files)
 let audioCtx = null;
 
-function playSound(freq = 220) {
+function playTone(freq = 220) {
   if (!audioCtx) return;
 
   const osc = audioCtx.createOscillator();
@@ -24,120 +22,104 @@ function playSound(freq = 220) {
   osc.type = "sine";
   osc.frequency.value = freq;
 
-  gain.gain.setValueAtTime(0.1, audioCtx.currentTime);
-  gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.3);
+  gain.gain.value = 0.05;
 
   osc.connect(gain);
   gain.connect(audioCtx.destination);
 
   osc.start();
-  osc.stop(audioCtx.currentTime + 0.3);
+  osc.stop(audioCtx.currentTime + 0.1);
+}
+
+
+// 
+class Entity {
+  constructor(x, y) {
+    this.x = x;
+    this.y = y;
+    this.vx = Math.random() * 2 - 1;
+    this.vy = Math.random() * 2 - 1;
+    this.phase = Math.floor(Math.random() * 4);
+  }
+
+  step() {
+    // simple phase-based behavior
+    if (this.phase === 0) {
+      this.x += this.vx * 20;
+      this.y += this.vy * 20;
+    }
+
+    // wrap around edges
+    this.x = (this.x + canvas.width) % canvas.width;
+    this.y = (this.y + canvas.height) % canvas.height;
+
+    this.phase = (this.phase + 1) % 4;
+  }
+
+  draw() {
+    ctx.beginPath();
+    ctx.arc(this.x, this.y, 4, 0, Math.PI * 2);
+    ctx.fillStyle = "white";
+    ctx.fill();
+  }
 }
 
 
 // World state
 
-let nodes = [];
+const entities = [];
+const ENTITY_COUNT = 12;
 
-// Example project links
-const projectLinks = [
-  { label: "Project1", url: "https://shimingyue.itch.io/ripple" },
-  { label: "Project2", url: "https://youtu.be/44LIvvbIE10?si=ySCnc5qHPBkpO0nu" }
-];
-
-
-
-function createNode(x, y, special = false) {
-  return {
-    x,
-    y,
-    vx: (Math.random() - 0.5) * 1.5,
-    vy: (Math.random() - 0.5) * 1.5,
-    life: 1,
-    radius: special ? 10 : 4,
-    special,
-    link: special ? projectLinks[Math.floor(Math.random() * projectLinks.length)] : null
-  };
+for (let i = 0; i < ENTITY_COUNT; i++) {
+  entities.push(
+    new Entity(
+      Math.random() * canvas.width,
+      Math.random() * canvas.height
+    )
+  );
 }
 
-// Unified interaction:
+let pulse = 0;
+let running = false;
 
-function interact(x, y) {
-  // First interaction unlocks audio
+
+function stepWorld() {
+  pulse++;
+
+  entities.forEach(e => e.step());
+
+  // sound as temporal marker
+  if (pulse % 4 === 0) {
+    playTone(180 + pulse * 2);
+  }
+
+  draw();
+}
+
+// Render
+
+function draw() {
+  ctx.fillStyle = "black";
+  ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+  entities.forEach(e => e.draw());
+}
+
+
+// Interaction
+
+function interact() {
   if (!audioCtx) {
     audioCtx = new AudioContext();
   }
 
-  playSound(200 + Math.random() * 400);
-
-  // Create new nodes
-  nodes.push(createNode(x, y));
-
-  // Small chance to spawn a meaningful node
-  if (Math.random() < 0.15) {
-    nodes.push(createNode(x, y, true));
-  }
+  // each interaction advances time
+  stepWorld();
 }
 
-// Mouse & keyboard share the same logic
-canvas.addEventListener("click", e => {
-  interact(e.clientX, e.clientY);
-});
+// One unified interaction logic
+window.addEventListener("keydown", interact);
+canvas.addEventListener("click", interact);
 
-window.addEventListener("keydown", e => {
-  interact(
-    Math.random() * canvas.width,
-    Math.random() * canvas.height
-  );
-});
-
-
-// World update loop
-
-
-function update() {
-  ctx.fillStyle = "rgba(14,14,17,0.2)";
-  ctx.fillRect(0, 0, canvas.width, canvas.height);
-
-  nodes.forEach(n => {
-    // Movement
-    n.x += n.vx;
-    n.y += n.vy;
-
-    // Soft boundaries
-    if (n.x < 0 || n.x > canvas.width) n.vx *= -1;
-    if (n.y < 0 || n.y > canvas.height) n.vy *= -1;
-
-    // Life decay
-    n.life *= 0.995;
-
-    // Draw
-    ctx.beginPath();
-    ctx.arc(n.x, n.y, n.radius * n.life, 0, Math.PI * 2);
-    ctx.fillStyle = n.special ? "#ffffff" : "#888";
-    ctx.fill();
-  });
-
-  // Remove dead nodes
-  nodes = nodes.filter(n => n.life > 0.05);
-
-  requestAnimationFrame(update);
-}
-
-update();
-
-// Click special nodes → link
-
-canvas.addEventListener("mousedown", e => {
-  nodes.forEach(n => {
-    if (!n.special || !n.link) return;
-
-    const dx = e.clientX - n.x;
-    const dy = e.clientY - n.y;
-    const dist = Math.sqrt(dx * dx + dy * dy);
-
-    if (dist < n.radius * 1.5) {
-      window.open(n.link.url, "_blank");
-    }
-  });
-});
+// initial state
+draw();
