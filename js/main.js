@@ -41,8 +41,8 @@ let nodes = [];
 
 // Example project links
 const projectLinks = [
-  { label: "Project1", url: "https://yourlink.com" },
-  { label: "Project2", url: "https://yourlink.com" }
+  { label: "Project1", url: "https://shimingyue.itch.io/ripple" },
+  { label: "Project2", url: "https://youtu.be/44LIvvbIE10?si=ySCnc5qHPBkpO0nu" }
 ];
 
 
