@@ -1,6 +1,6 @@
 
 // Canvas setup
-const canvas = document.getElementById("canvas");
+const canvas = document.getElementById("world");
 const ctx = canvas.getContext("2d");
 
 function resize() {
